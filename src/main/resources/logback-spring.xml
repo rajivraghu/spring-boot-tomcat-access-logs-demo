@@ -1,8 +1,36 @@
 <configuration>
-  <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
-  </appender>
+  <property name="FOLDER_NAME" value="logs" />
+  <appender name="LOGSTASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${FOLDER_NAME}/ls.json</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${FOLDER_NAME}/ls.json.%d{yyyy-MM-dd}.gz</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+		<encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+			<providers>
+				<timestamp>
+					<timeZone>UTC</timeZone>
+				</timestamp>
+				<pattern>
+					<pattern>
+						{
+						"timestamp": "@timestamp",
+						"severity": "%level",
+						"service": "${springAppName:-}",
+						"trace": "%X{traceId:-}",
+						"span": "%X{spanId:-}",
+						"baggage": "%X{key:-}",
+						"pid": "${PID:-}",
+						"thread": "%thread",
+						"class": "%logger{40}",
+						"rest": "%message"
+						}
+					</pattern>
+				</pattern>
+			</providers>
+		</encoder>
+	</appender>
   <root level="INFO">
-    <appender-ref ref="jsonConsoleAppender"/>
+    <appender-ref ref="LOGSTASH"/>
   </root>
 </configuration>

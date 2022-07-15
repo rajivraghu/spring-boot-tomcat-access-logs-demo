@@ -2,10 +2,10 @@
   <appender name="accessJsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
     <encoder class="net.logstash.logback.encoder.AccessEventCompositeJsonEncoder">
       <providers>
-        <timestamp />
         <pattern>
           <pattern>
             {
+            "timestamp": "%date{ISO8601}",
             "@version" : "1",
             "@type" : "access",
             "client-host" : "%clientHost",
