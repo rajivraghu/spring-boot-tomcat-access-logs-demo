@@ -1,5 +1,11 @@
-<configuration debug="false">
-  <appender name="accessJsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+<configuration>
+  <property name="FOLDER_NAME" value="accesslog" />
+<appender name="accesslog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+  <file>${FOLDER_NAME}/ls.json</file>
+  <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+    <fileNamePattern>${FOLDER_NAME}/ls.json.%d{yyyy-MM-dd}.gz</fileNamePattern>
+    <maxHistory>7</maxHistory>
+  </rollingPolicy>
     <encoder class="net.logstash.logback.encoder.AccessEventCompositeJsonEncoder">
       <providers>
         <pattern>
@@ -24,6 +30,6 @@
     </encoder>
   </appender>
   ​
-  <appender-ref ref="accessJsonConsoleAppender" />
+  <appender-ref ref="accesslog" />
   ​
 </configuration>
